@@ -33,7 +33,6 @@ public class MiningHardware {
         this.power = power;
     }
 
-    // TODO
     public double operatingDailyCost(double unitkWhCost){
         return 1.0;
     }

@@ -32,17 +32,15 @@ public class HourlyConsumption {
     }
 
 
-    // TODO
     public static long getFinnishConsumptionLast24h(String apiKey){
         return 10L;
     }
 
-    // TODO
+
     public static List<HourlyConsumption> getFinnishConsumption(LocalDateTime startTime, LocalDateTime endTime, String apiKey){
         return null;
     }
 
-    // TODO
     private static String queryFinnishAPI(LocalDateTime startTime, LocalDateTime endTime, String apiKey){
         return "json string";
     }

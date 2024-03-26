@@ -27,7 +27,7 @@ public class App {
     public static void main(String[] args) {
 
         //Q1  hashrate
-        System.out.println("\nQuestion 1:");
+        System.out.println("\n Question 1:");
         double localHashrate = new HashRateEstimator(500,5).estimate();
         System.out.print("localHashrate: ");
         System.out.println(localHashrate);
@@ -37,63 +37,56 @@ public class App {
         Explorer explorer = new Explorer(); // for interacting with blockchain.info API
         String BlockHash = explorer.getLatestHash();
         Block Block = explorer.getBlockFromHash(context.getParams(), BlockHash);
-
-        System.out.println("\nQuestion 2:");
+        System.out.println("\n Question 2:");
         System.out.print("Nonce: ");
         System.out.println(Block.getNonce());
         System.out.print("Difficulty level: ");
         System.out.println(Block.getDifficultyTargetAsInteger());
 
         // Q3 Some TXs
-        System.out.println("\nQuestion 3:");
+        System.out.println("\n Question 3:");
         System.out.print("Transaction N°1: ");
         System.out.println(Block.getTransactions().get(0).getHashAsString());
         System.out.print("Transaction N°2: ");
         System.out.println(Block.getTransactions().get(1).getHashAsString());
 
-
         // Q4 Mine a new block
         Miner miner = new Miner(context.getParams());
         // empty list of tx since creating txs, even fake ones, requires some work
         ArrayList<Transaction> txs = new ArrayList<>();
-
+        //Q4 code de Miner modifié
 
         //Q5
-        System.out.println("\nQuestion 5:");
-        System.out.println("Non, mon bloc ne serait pas accepté par le réseau car il ne satisfait pas au niveau de" +
+        System.out.println("\n Question 5:");
+        System.out.println("Non, le bloc ne serait pas accepté par le réseau car il ne satisfait pas au niveau de" +
                 " difficulté actuel du réseau Bitcoin et il manque une preuve de travail valide nécessaire.");
 
-
         //Q6
-        System.out.println("\nQuestion 6:");
+        System.out.println("\n Question 6:");
         //en utilisant le site https://www.stelareum.io/mining/gpu.html j'ai obtenu les hashrates de ma carte graphique
         long hashrate = 35_000_000; // 35 MH/s
         System.out.println("Avec un hashrate de 35 MH/s et le niveau de difficulté donné, " +
                 "Pour miner un bloc seul il me faudrait beaucoup de temps");
 
-
         //Q7
-        System.out.println("\nQuestion 7:");
+        System.out.println("\n Question 7:");
         BigInteger difficulty = BigInteger.valueOf(2).pow(20);
-        long expectedTimeSeconds = ImpactUtils.expectedMiningTime(hashrate, difficulty);
-        double years = expectedTimeSeconds / (365.25 * 24 * 3600);
-        System.out.println("Temps moyen pour miner un bloc sur ma machine :" + years + " années");
-
+        long timeSeconds = ImpactUtils.expectedMiningTime(hashrate, difficulty);
+        double years = timeSeconds / (365.25 * 24 * 3600);
+        System.out.println("Temps moyen pour miner un bloc sur ma machine : " + years + " années");
 
         // Q8
-        System.out.println("\nQuestion 8:");
+        System.out.println("\n Question 8:");
         BigInteger currentDifficulty = Block.getDifficultyTargetAsInteger();
         double networkHashrate = ImpactUtils.networkHashrate(currentDifficulty);
-        System.out.println("Hashrate du réseau : " + networkHashrate + " h/s");
+        System.out.println("Hashrate : " + networkHashrate + " h/s");
 
         // Q9/Q10 energy w/ most profitable hardware
-        System.out.println("\nQuestion 9/Question 10");
+        System.out.println("\n Question 9 et 10:");
         double c = 100;
         double p = 2000;
-        double energyConsumed = ImpactUtils.energyConsumedLast24h(c, p);
-        System.out.println("Énergie consommée par le réseau bitcoin dans les dernières 24h: " + energyConsumed + " kWh");
-
-
+        double energy = ImpactUtils.energyConsumedLast24h(c, p);
+        System.out.println("Énergie consommée par le réseau bitcoin pendant les dernières 24h: " + energy + " kWh");
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(YearMonth.class,new YearMonthAdapter())
                 .create();
