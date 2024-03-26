@@ -5,9 +5,7 @@ import java.math.BigInteger;
 public class ImpactUtils {
 
 
-
-
-
+    private static final long AVERAGE_BLOCK_TIME_SECONDS = 600; // 10 minutes in seconds
     /**
      * computes the expected time (in seconds) for mining a block
      * @param hashrate: miner hashing capacity (hash/s)
@@ -16,7 +14,9 @@ public class ImpactUtils {
      */
     // TODO
     public static long expectedMiningTime(long hashrate, BigInteger difficultyAsInteger){
-        return 1L ;
+        double nombreMoyenhash = 1.0 / calculerProbabiliteMinage(difficultyAsInteger);
+        return (long) (nombreMoyenhash / hashrate);
+
     }
 
     /**
@@ -26,7 +26,7 @@ public class ImpactUtils {
      */
     // TODO
     public static long  globalHashRate(BigInteger difficultyAsInteger){
-        return 1L;
+        return (long) (Math.pow(2, 22) / difficultyAsInteger.doubleValue());
     }
 
     /**
@@ -40,7 +40,25 @@ public class ImpactUtils {
      */
     // TODO
     public static long globalEnergyConsumption(long minerHashrate, long minerPower, long networkHashrate, long duration){
-        return 1L;
+        double totalPower = (double) (networkHashrate / minerHashrate) * minerPower;
+        return (long) (totalPower * (duration / 3600.0));
+    }
+
+    private static double calculerProbabiliteMinage(BigInteger difficultyAsInteger) {
+        BigInteger nombreMaxHashs = BigInteger.valueOf(2).pow(256);
+        return difficultyAsInteger.doubleValue() / nombreMaxHashs.doubleValue();
+    }
+
+
+    public static double networkHashrate(BigInteger difficultyAsInteger) {
+        BigInteger hashrate = BigInteger.valueOf(2).pow(256).divide(difficultyAsInteger.multiply(BigInteger.valueOf(AVERAGE_BLOCK_TIME_SECONDS)));
+        return hashrate.doubleValue();
+    }
+
+    public static double energyConsumedLast24h(double c, double p) {
+        double powerInKW = p / 1000.0;
+        double hashPerDay = c * 1_000_000_000 * 24 * 60 * 60;
+        return hashPerDay * powerInKW / 1_000;
     }
 
 

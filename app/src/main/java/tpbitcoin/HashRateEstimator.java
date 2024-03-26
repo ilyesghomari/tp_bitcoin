@@ -28,21 +28,23 @@ public class HashRateEstimator {
     public double estimate(){
         byte[] bytes;
         MessageDigest md = Sha256Hash.newDigest();
-        Random random = new Random();
-        bytes = new byte[256];
+
         long totalHashes = 0;
-        for (int i=1 ; i <= numberOfTries ; i++){
+        long totalTime = duration * numberOfTries;
+
+        for(int i = 0; i < numberOfTries;i++){
+            bytes = new byte[64];
             long startTime = System.currentTimeMillis();
-            long count = 0;
-            while (System.currentTimeMillis() - startTime < duration) {
-                random.nextBytes(bytes);
+            long endTime = startTime + duration;
+
+            while(System.currentTimeMillis() < endTime){
                 md.update(bytes);
                 md.digest();
-                count++;
+                totalHashes++;
             }
-            totalHashes += count;
-            System.out.println("Experiment " + i + " : " + count + " hashes in " + duration + "ms");
         }
-        return  totalHashes / (numberOfTries * (duration / 1000.0));
+
+        return (double)totalHashes / (totalTime / 1000.0);
     }
+
 }
