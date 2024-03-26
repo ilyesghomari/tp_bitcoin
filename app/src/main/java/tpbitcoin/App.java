@@ -24,76 +24,70 @@ import java.util.List;
 
 public class App {
 
-
-
     public static void main(String[] args) {
 
         //Q1  hashrate
-        System.out.println("\nQ1:");
+        System.out.println("\nQuestion 1:");
         double localHashrate = new HashRateEstimator(500,5).estimate();
-        System.out.print("Hashrate: ");
+        System.out.print("localHashrate: ");
         System.out.println(localHashrate);
 
         // Q2: latest  block  from mainet (bitcoin blockchain) and its predecessor
-        Context context   = new Context(new UnitTestParams()); // required  for working with bitcoinj
+        Context context = new Context(new UnitTestParams()); // required  for working with bitcoinj
         Explorer explorer = new Explorer(); // for interacting with blockchain.info API
-        String latestBlockHash = explorer.getLatestHash();
-        Block latestBlock = explorer.getBlockFromHash(context.getParams(), latestBlockHash);
+        String BlockHash = explorer.getLatestHash();
+        Block Block = explorer.getBlockFromHash(context.getParams(), BlockHash);
 
-        System.out.println("\nQ2:");
+        System.out.println("\nQuestion 2:");
         System.out.print("Nonce: ");
-        System.out.println(latestBlock.getNonce());
-        System.out.print("Niveau de difficulté: ");
-        System.out.println(latestBlock.getDifficultyTargetAsInteger());
+        System.out.println(Block.getNonce());
+        System.out.print("Difficulty level: ");
+        System.out.println(Block.getDifficultyTargetAsInteger());
 
         // Q3 Some TXs
-        System.out.println("\nQ3:");
-        System.out.print("Transaction 1: ");
-        System.out.println(latestBlock.getTransactions().get(0).getHashAsString());
-        System.out.print("Transaction 2: ");
-        System.out.println(latestBlock.getTransactions().get(1).getHashAsString());
+        System.out.println("\nQuestion 3:");
+        System.out.print("Transaction N°1: ");
+        System.out.println(Block.getTransactions().get(0).getHashAsString());
+        System.out.print("Transaction N°2: ");
+        System.out.println(Block.getTransactions().get(1).getHashAsString());
 
 
         // Q4 Mine a new block
         Miner miner = new Miner(context.getParams());
         // empty list of tx since creating txs, even fake ones, requires some work
         ArrayList<Transaction> txs = new ArrayList<>();
-        // TODO : mine a new block
 
 
         //Q5
-        System.out.println("\nQ5");
-        System.out.println("Non, mon bloc ne serait pas accepté par le " +
-                "réseau car il ne répond pas à la difficulté actuelle du réseau Bitcoin " +
-                "et manque la preuve de travail valide requise.");
-
+        System.out.println("\nQuestion 5:");
+        System.out.println("Non, mon bloc ne serait pas accepté par le réseau car il ne satisfait pas au niveau de" +
+                " difficulté actuel du réseau Bitcoin et il manque une preuve de travail valide nécessaire.");
 
 
         //Q6
-        System.out.println("\nQ6");
+        System.out.println("\nQuestion 6:");
         //en utilisant le site https://www.stelareum.io/mining/gpu.html j'ai obtenu les hashrates de ma carte graphique
-        long hashrate = 45_000_000; // 45 MH/s
-        System.out.println("Avec un hashrate de 45 MH/s et le niveau de difficulté donné, " +
-                "il me faudrait des années pour miner un bloc seul");
+        long hashrate = 35_000_000; // 35 MH/s
+        System.out.println("Avec un hashrate de 35 MH/s et le niveau de difficulté donné, " +
+                "Pour miner un bloc seul il me faudrait beaucoup de temps");
 
 
         //Q7
-        System.out.println("\nQ7");
-
+        System.out.println("\nQuestion 7:");
         BigInteger difficulty = BigInteger.valueOf(2).pow(20);
         long expectedTimeSeconds = ImpactUtils.expectedMiningTime(hashrate, difficulty);
         double years = expectedTimeSeconds / (365.25 * 24 * 3600);
-        System.out.println("Temps moyen pour miner un bloc sur ma machine : " + years + " années");
+        System.out.println("Temps moyen pour miner un bloc sur ma machine :" + years + " années");
 
 
         // Q8
-        System.out.println("\nQ8");
-        BigInteger currentDifficulty = latestBlock.getDifficultyTargetAsInteger();
+        System.out.println("\nQuestion 8:");
+        BigInteger currentDifficulty = Block.getDifficultyTargetAsInteger();
         double networkHashrate = ImpactUtils.networkHashrate(currentDifficulty);
         System.out.println("Hashrate du réseau : " + networkHashrate + " h/s");
 
         // Q9/Q10 energy w/ most profitable hardware
-        System.out.println("\nQ9/Q10");
+        System.out.println("\nQuestion 9/Question 10");
         double c = 100;
         double p = 2000;
         double energyConsumed = ImpactUtils.energyConsumedLast24h(c, p);
@@ -112,7 +106,6 @@ public class App {
         } catch (Exception e) {
             System.err.println("error opening/reading hardware.json "+ e.getMessage());
         }
-
 
     }
 
